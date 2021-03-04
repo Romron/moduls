@@ -1,0 +1,28 @@
+1614780674569	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-width=960.0" "-height=830.7692307692307" "-foreground" "-no-remote" "-profile" "C:\\Users\\BEREHU~1\\AppData\\Local\\Temp\\rust_mozprofileAMajY6"
+1614780675216	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
+1614780675711	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1614780675711	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1614780675711	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1614780675712	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+1614780677862	Marionette	INFO	Listening on port 57109
+1614780677938	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://tpc.googlesyndication.com/sadbundle/$csp%3Der3$/13298309791513575843/index.html#t=7892190893261307531&p=https%3A%2F%2Fgoogleads.g.doubleclick.net, line 214: TypeError: studio.Enabler is undefined
+JavaScript error: https://tpc.googlesyndication.com/sadbundle/$csp%3Der3$/13298309791513575843/index.html#t=10796523516933587888&p=https%3A%2F%2Fgoogleads.g.doubleclick.net, line 214: TypeError: studio.Enabler is undefined
+JavaScript error: https://tpc.googlesyndication.com/pagead/js/r20210301/r20110914/client/qs_click_protection_fy2019.js, line 17: NS_ERROR_NOT_INITIALIZED: 
+JavaScript error: https://tpc.googlesyndication.com/pagead/js/r20210301/r20110914/client/qs_click_protection_fy2019.js, line 17: NS_ERROR_NOT_INITIALIZED: 
+JavaScript error: https://tpc.googlesyndication.com/sadbundle/$csp%3Der3$/13298309791513575843/index.html#t=4571250550437132241&p=https%3A%2F%2Fgoogleads.g.doubleclick.net, line 214: TypeError: studio.Enabler is undefined
+JavaScript error: https://tpc.googlesyndication.com/pagead/js/r20210301/r20110914/client/qs_click_protection_fy2019.js, line 17: NS_ERROR_NOT_INITIALIZED: 
+JavaScript error: https://tpc.googlesyndication.com/pagead/js/r20210301/r20110914/client/qs_click_protection_fy2019.js, line 17: NS_ERROR_NOT_INITIALIZED: 
+JavaScript error: https://tpc.googlesyndication.com/sadbundle/$csp%3Der3$/13298309791513575843/index.html#t=15254089863880209445&p=https%3A%2F%2Fgoogleads.g.doubleclick.net, line 214: TypeError: studio.Enabler is undefined
+JavaScript error: https://tpc.googlesyndication.com/sadbundle/$csp%3Der3$/13298309791513575843/index.html#t=809109594672166572&p=https%3A%2F%2Fgoogleads.g.doubleclick.net, line 214: TypeError: studio.Enabler is undefined
+IPDL protocol error: Handler returned error code!
+
+###!!! [Parent][DispatchAsyncMessage] Error: PMessagePort::Msg_PostMessages Processing error: message was deserialized, but the handler returned false (indicating failure)
+
+JavaScript error: , line 0: uncaught exception: undefined
+1614780775988	Marionette	INFO	Stopped listening on port 57109
+[Child 3708, Chrome_ChildThread] WARNING: pipe error: 232: file /builds/worker/checkouts/gecko/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 522
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
