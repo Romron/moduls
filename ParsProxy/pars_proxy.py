@@ -55,6 +55,121 @@ listProxyPages = [    				# для тестов
 
 
 
+def get_ProxyList(path_dir_for_result_file):
+	'''
+		Собирает ip proxy с сайтов доноров
+		записывает их в файл
+		файл ложит в указанную папку
+	'''
+	if os.path.exists(path_dir_for_result_file) == False:
+		print('Указан не корректный путь для сохранения файла результатов' )
+		return False
+
+
+	driver = False
+	link_NextPage = None
+
+	# for fileName in listProxyPages:
+	for URL in listProxyPagesURLs:
+		
+		flag_page_enumeration = 1
+		count_ProxyIP = 0
+		IP_proxy = ''
+
+		print(URL)
+		# print(fileName)
+		
+		while flag_page_enumeration:			# цикл продолжается пока есть ссылка на сл. страницу
+			# для тестов:
+			# with open(fileName,'r',encoding="utf-8") as file_handler:
+			# 	html = file_handler.read()
+			# 	flag_page_enumeration = 0
+
+			if not link_NextPage:
+				URL_Next_Page = URL
+
+			arr_result = Get_HTML(URL_Next_Page,1,IP_proxy,1,driver)	# функция возвратит arr_result[html,driver]
+			if type(arr_result) == bool:
+				html = arr_result
+			elif type(arr_result) == list:
+				html = arr_result[0]
+				try:			# на тот случай если Get_HTML() вернёт только arr_result[0]
+					driver = arr_result[1]
+				except IndexError:
+					pass
+
+			if check_CaptchaPage(html) == 'CAPTCHA' or html == False:
+				try:			# если result_listProxy нет 
+					if re.search('http://free-proxy.cz/en',URL_Next_Page):
+						raise NameError			# генерирую исключение т.к. этот сайт не пускает дальше 5 страницы без каптчи
+					if len(result_listProxy) == 0:   # если result_listProxy есть, но он равен нулю
+						raise NameError			# генерирую исключение
+					if count_ProxyIP < len(result_listProxy):			# Перебираю result_listProxy
+						IP_proxy = result_listProxy[coиunt_ProxyIP]    
+						count_ProxyIP += 1
+						print(str(count_ProxyIP) + '. ' + IP_proxy)
+					else:
+						time1 = time.time()
+						time2 = time.time()
+						print("\n Перебор доступного списка прокси окончен. В списке было  " + count_ProxyIP + " прокси")
+						print("Для повторного перебора нажмите Enter...")
+						print("Для перехода к следующему сайту нажмите ПРОБЕЛ...\n")
+						while time2 - time1 < timeout:
+							if keyboard.is_pressed('Enter'):
+								count_ProxyIP = 1
+								break
+							elif keyboard.is_pressed('space'):
+								count_ProxyIP = False  # т.е. count_ProxyIP в данном случае используеться как флаг по которому программа выйдет из внешнего цыкла
+								break
+							time2 = time.time()
+					if count_ProxyIP == False:	
+						break
+					continue # эта строка должна вернуть прогамму к обработке тогоже URLа но сдругим IP
+			
+				except NameError:
+					print('Сайт заблокирован, списка прокси нет')
+					html = False
+					link_NextPage = ''	# для того чтобы на следующей итерации цыкла for обрабатывался именно новый URL а не значение link_NextPage из текущей итерации
+					break 				# эта строка должна закончить оброботку текущего URLа и переходить к следующему 
+
+			if html:
+				listProxy = Get_ProxyIP(html)
+				
+				print(listProxy)		# для тестов
+
+				for IP_Port in listProxy:
+					result_listProxy.append(IP_Port)
+				link_NextPage = Get_LinkNextPage(html)
+				
+				if link_NextPage:			
+					URL_Next_Page = URL + link_NextPage
+
+					print('\n' + URL_Next_Page)
+
+				else:
+					flag_page_enumeration = 0
+					# driver.close()	# закрываю браузер
+
+			else:
+
+				continue
+	
+	if driver:	
+		# driver.close()	# закрываю браузер если он всё ещё открыт
+		driver.quit()	# закрываю браузер если он всё ещё открыт
+
+
+	print('\n\n')
+	print(result_listProxy)
+
+	#============= Записываем полученные прокси в файл: ============
+	if not os.path.exists(path_dir_for_result_file) :
+		os.mkdir(path_dir_for_result_file)
+
+	timePars = time.strftime("%d-%m-%Y %H.%M.%S", time.localtime())
+	fileName = path_dir_for_result_file + '/proxylist '+ timePars +' .json'
+	with open(fileName, 'w', encoding = 'utf-8') as f:
+		json.dump(result_listProxy, f, indent = 2, ensure_ascii = False)	# json.dump() сама пишит в файл
 
 def Get_HTML(URL,mode=1,IP_proxy='',flag_return_driver=0,driver=False):
 	'''
@@ -239,117 +354,16 @@ def check_CaptchaPage(html):
 	return True
 
 
-
 # ##################################################################################################################
 # ##################################################################################################################
 
+if __name__ == '__main__':
 
-if __name__ == '__main__':		
+	'''
+		если модуль запускаеться отдельно, не импорт, 
+		результирующий файл будет в папке Proxylist 
+		которая будет создана в той же папке что и файл скрипта
+	'''
 
-	driver = False
-	link_NextPage = None
-
-	# for fileName in listProxyPages:
-	for URL in listProxyPagesURLs:
-		
-		flag_page_enumeration = 1
-		count_ProxyIP = 0
-		IP_proxy = ''
-
-		print(URL)
-		# print(fileName)
-		
-		while flag_page_enumeration:			# цикл продолжается пока есть ссылка на сл. страницу
-			# для тестов:
-			# with open(fileName,'r',encoding="utf-8") as file_handler:
-			# 	html = file_handler.read()
-			# 	flag_page_enumeration = 0
-
-			if not link_NextPage:
-				URL_Next_Page = URL
-
-			arr_result = Get_HTML(URL_Next_Page,1,IP_proxy,1,driver)	# функция возвратит arr_result[html,driver]
-			if type(arr_result) == bool:
-				html = arr_result
-			elif type(arr_result) == list:
-				html = arr_result[0]
-				try:			# на тот случай если Get_HTML() вернёт только arr_result[0]
-					driver = arr_result[1]
-				except IndexError:
-					pass
-
-			if check_CaptchaPage(html) == 'CAPTCHA' or html == False:
-				try:			# если result_listProxy нет 
-					if re.search('http://free-proxy.cz/en',URL_Next_Page):
-						raise NameError			# генерирую исключение т.к. этот сайт не пускает дальше 5 страницы без каптчи
-					if len(result_listProxy) == 0:   # если result_listProxy есть, но он равен нулю
-						raise NameError			# генерирую исключение
-					if count_ProxyIP < len(result_listProxy):			# Перебираю result_listProxy
-						IP_proxy = result_listProxy[coиunt_ProxyIP]    
-						count_ProxyIP += 1
-						print(str(count_ProxyIP) + '. ' + IP_proxy)
-					else:
-						time1 = time.time()
-						time2 = time.time()
-						print("\n Перебор доступного списка прокси окончен. В списке было  " + count_ProxyIP + " прокси")
-						print("Для повторного перебора нажмите Enter...")
-						print("Для перехода к следующему сайту нажмите ПРОБЕЛ...\n")
-						while time2 - time1 < timeout:
-							if keyboard.is_pressed('Enter'):
-								count_ProxyIP = 1
-								break
-							elif keyboard.is_pressed('space'):
-								count_ProxyIP = False  # т.е. count_ProxyIP в данном случае используеться как флаг по которому программа выйдет из внешнего цыкла
-								break
-							time2 = time.time()
-					if count_ProxyIP == False:	
-						break
-					continue # эта строка должна вернуть прогамму к обработке тогоже URLа но сдругим IP
-			
-				except NameError:
-					print('Сайт заблокирован, списка прокси нет')
-					html = False
-					link_NextPage = ''	# для того чтобы на следующей итерации цыкла for обрабатывался именно новый URL а не значение link_NextPage из текущей итерации
-					break 				# эта строка должна закончить оброботку текущего URLа и переходить к следующему 
-
-			if html:
-				listProxy = Get_ProxyIP(html)
-				
-				print(listProxy)		# для тестов
-
-				for IP_Port in listProxy:
-					result_listProxy.append(IP_Port)
-				link_NextPage = Get_LinkNextPage(html)
-				
-				if link_NextPage:			
-					URL_Next_Page = URL + link_NextPage
-
-					print('\n' + URL_Next_Page)
-
-				else:
-					flag_page_enumeration = 0
-					# driver.close()	# закрываю браузер
-
-			else:
-
-				continue
-	
-	if driver:	
-		# driver.close()	# закрываю браузер если он всё ещё открыт
-		driver.quit()	# закрываю браузер если он всё ещё открыт
-
-
-	print('\n\n')
-	print(result_listProxy)
-
-# Этот участок кода почемуто не запушилсе в original 
-
-#============= Записываем полученные прокси в файл: ============
-pathDir = os.path.dirname(os.path.abspath(__file__)) +  "/Proxylist"		
-if not os.path.exists(pathDir) :
-	os.mkdir(pathDir)
-
-timePars = time.strftime("%d-%m-%Y %H.%M.%S", time.localtime())
-fileName = pathDir + '/proxylist '+ timePars +' .json'
-with open(fileName, 'w', encoding = 'utf-8') as f:
-	json.dump(result_listProxy, f, indent = 2, ensure_ascii = False)	# json.dump() сама пишит в файл
+	path_dir_for_result_file = os.path.dirname(os.path.abspath(__file__)) +  "/Proxylist"	
+	get_ProxyList(path_dir_for_result_file)

@@ -1,11 +1,11 @@
 
+import random
 
 
 
 
 
-
-def main_bot_PF_1(URL,browser):
+def bot_PF_1(URL,browser):
 
 	try:
 		browser.get(URL)
@@ -33,8 +33,6 @@ def main_bot_PF_1(URL,browser):
 				count_try_clicks_links += 1
 				print(count_try_clicks_links, '. попытка кликнуть случайную ссылку' )
 				print(e)
-
-
 
 
 		# Собрать все ссілки на страницы фильмов
@@ -103,3 +101,8 @@ def scroll_element(target_element, browser, scroll_element='body'):
 	# 	print("js_scroll:  ", js_scroll)
 	# 	print('x = ', x)
 
+
+
+
+if __name__ == '__main__':
+	print('Этот модуль предназначен только для импорта т.к. неимеет интерфейса для работы с пользователем')
