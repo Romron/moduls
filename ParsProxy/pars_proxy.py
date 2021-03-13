@@ -14,6 +14,13 @@ import json
 import keyboard
 import tkinter                 #  библиотека для графических интерфейсов 
 
+# подключаю свои модули:
+sys.path.append(os.path.dirname( __file__ ))
+import general_functions 
+
+
+
+
 
 
 result_listProxy = []
@@ -41,12 +48,10 @@ listProxyPages = [    				# для тестов
 	 	# 'Proxy_pages/hidester.com.txt',
 		]
 
-
 # result_listProxy = [				# для тестов
 	# '195.154.39.255:5836', 
 	# '206.127.88.18:80', 
 	# ]
-
 
 # test_IP_URL = 'https://2ip.ru/'		# слишком долго грузиться
 # test_IP_URL = 'https://myip.ru/'
@@ -220,10 +225,7 @@ def Get_HTML(URL,mode=1,IP_proxy='',flag_return_driver=0,driver=False):
 			r = tkinter.Tk()		# получаем объект для доступа к параметрам экрана
 
 			# выбираю версию geckodriver в зависимости от разрядности Windows
-			if sys.maxsize < 2**31 :
-				name_file_geckodriver = 'geckodriver-win32.exe'
-			else:
-				name_file_geckodriver = 'geckodriver-win64.exe'
+			name_file_geckodriver = general_functions.choose_geckodriver_file()
 
 			pathDriver = os.path.dirname(os.path.abspath(__file__)) + "\\" + name_file_geckodriver
 			opts = Options()

@@ -4,14 +4,22 @@ from selenium.webdriver.firefox.options import Options
 import json
 import sys
 
+# подключаю свои модули:
+sys.path.append(os.path.dirname( __file__ ))
+import general_functions 
+
+
 # def run_ThroughProxy(function,proxyList):
 def run_ThroughProxy(proxyList,function,URL):
 
 	count_proxyIP = 0
 
 
+	# выбираю версию geckodriver в зависимости от разрядности Windows
+	name_file_geckodriver = general_functions.choose_geckodriver_file()
+	pathDriver = os.path.dirname(os.path.abspath(__file__)) + "\\" + name_file_geckodriver
+	
 
-	pathDriver = os.path.dirname(os.path.abspath(__file__)) + "\\geckodriver.exe"
 	options = Options()
 	options.set_preference("dom.webdriver.enabled", False)
 	firefox_capabilities = webdriver.DesiredCapabilities.FIREFOX
