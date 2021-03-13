@@ -2,6 +2,7 @@ import requests
 import re 
 import os 
 import os.path
+import sys
 from selenium import webdriver	# импортирую модуль вебдрайвера
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -61,9 +62,9 @@ def get_ProxyList(path_dir_for_result_file):
 		записывает их в файл
 		файл ложит в указанную папку
 	'''
-	if os.path.exists(path_dir_for_result_file) == False:
-		print('Указан не корректный путь для сохранения файла результатов' )
-		return False
+	# if os.path.exists(path_dir_for_result_file) == False:
+	# 	print('Указан не корректный путь для сохранения файла результатов' )
+	# 	return False
 
 
 	driver = False
@@ -217,7 +218,14 @@ def Get_HTML(URL,mode=1,IP_proxy='',flag_return_driver=0,driver=False):
 		if flag_return_driver == 0 or driver == False:
 
 			r = tkinter.Tk()		# получаем объект для доступа к параметрам экрана
-			pathDriver = os.path.dirname(os.path.abspath(__file__)) + "\\geckodriver.exe"
+
+			# выбираю версию geckodriver в зависимости от разрядности Windows
+			if sys.maxsize < 2**31 :
+				name_file_geckodriver = 'geckodriver-win32.exe'
+			else:
+				name_file_geckodriver = 'geckodriver-win64.exe'
+
+			pathDriver = os.path.dirname(os.path.abspath(__file__)) + "\\" + name_file_geckodriver
 			opts = Options()
 			opts.set_preference("dom.webdriver.enabled", False)	# скрывает то что браузер управляеться автоматически
 			opts.headless = False
