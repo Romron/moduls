@@ -353,13 +353,15 @@ def check_CaptchaPage(html):
 	'''
 
 	try: 
-		if re.search('complete CAPTCHA to continue',html): 
+		if re.search('CAPTCHA',html): 
+			print('CAPTCHA')
 			return 'CAPTCHA'
 		# elif re.search('',html):
 		# 	return 'CAPTCHA'
 
 	except:
-		print('check_CaptchaPage(): Блокировки сайта не найдено')
+		pass
+		# print('check_CaptchaPage(): Блокировки сайта не найдено')
 
 	return True
 
