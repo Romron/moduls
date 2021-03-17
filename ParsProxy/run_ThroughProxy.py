@@ -16,7 +16,11 @@ import ParsProxy.pars_proxy as ParsProxy
 
 
 # def run_ThroughProxy(function,proxyList):
-def run_ThroughProxy(proxyList,function,URL,flag_check_Captcha=False):
+def run_ThroughProxy(proxyList,function,URL,flag_check_Captcha=False,flag_headless=False,flag_sond=False):
+
+	'''
+		
+	'''
 
 	count_proxyIP = 0
 	count_FailStart = 1
@@ -28,10 +32,16 @@ def run_ThroughProxy(proxyList,function,URL,flag_check_Captcha=False):
 	
 
 	options = Options()
-	options.set_preference("dom.webdriver.enabled", False)
+	options.set_preference("dom.webdriver.enabled", False)	# скрыть что браузер под управлением webdriver
+
+	if flag_headless == True:		# запуск в безголовом режиме
+		options.headless = True
 	firefox_capabilities = webdriver.DesiredCapabilities.FIREFOX
 	firefox_capabilities["marionette"] = True
 
+	if flag_sond == True:		# запуск в беззвучном режиме
+		profile = webdriver.FirefoxProfile()
+		profile.set_preference("media.volume_scale", "0.0")
 
 	while count_proxyIP < len(proxyList):
 		proxyIP = proxyList[count_proxyIP]
@@ -50,6 +60,7 @@ def run_ThroughProxy(proxyList,function,URL,flag_check_Captcha=False):
 			browser = webdriver.Firefox(
 				executable_path=pathDriver,
 				options=options,
+				firefox_profile=profile,
 				proxy=proxyIP)
 			browser.set_page_load_timeout(900)	# ожидание загрузки страницы 15 минут
 		except Exception as e:
